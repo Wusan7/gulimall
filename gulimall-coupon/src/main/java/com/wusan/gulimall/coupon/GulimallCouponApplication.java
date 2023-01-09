@@ -6,8 +6,12 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 
 
+/**
+ * 在主启动类上加上注解@MapperScan()
+ *
+ * @author wusan
+ */
 @EnableDiscoveryClient
-//在主启动类上加上注解@MapperScan()
 @MapperScan("com.wusan.gulimall.coupon.dao")
 @SpringBootApplication
 public class GulimallCouponApplication {
