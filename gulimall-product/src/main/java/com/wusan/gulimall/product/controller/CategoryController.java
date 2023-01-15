@@ -1,15 +1,12 @@
 package com.wusan.gulimall.product.controller;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 //import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.wusan.gulimall.product.entity.CategoryEntity;
 import com.wusan.gulimall.product.service.CategoryService;
@@ -31,15 +28,16 @@ public class CategoryController {
     @Autowired
     private CategoryService categoryService;
 
+
     /**
+     * 树形结构的三级菜单menu
      * 列表
      */
-    @RequestMapping("/list")
-    //@RequiresPermissions("product:category:list")
-    public R list(@RequestParam Map<String, Object> params){
-        PageUtils page = categoryService.queryPage(params);
+    @RequestMapping("/listWithTree")
+    public R list(){
+        List<CategoryEntity> list = categoryService.listWithTree();
 
-        return R.ok().put("page", page);
+        return R.ok().put("data", list);
     }
 
 
@@ -72,19 +70,36 @@ public class CategoryController {
     //@RequiresPermissions("product:category:update")
     public R update(@RequestBody CategoryEntity category){
 		categoryService.updateById(category);
-
+        System.out.println(category.toString());
         return R.ok();
     }
 
     /**
      * 删除
+     *
+     * RequestBody 主要用来接收前端传递给后端的json字符串中的数据的(请求体中的数据的)；
+     * 只有post请求才有请求体 所以这其实是一个post请求
+     *
      */
     @RequestMapping("/delete")
-    //@RequiresPermissions("product:category:delete")
     public R delete(@RequestBody Long[] catIds){
-		categoryService.removeByIds(Arrays.asList(catIds));
+//		categoryService.removeByIds(Arrays.asList(catIds));
 
+        System.out.println(Arrays.toString(catIds));
+
+        categoryService.deleteByIds(Arrays.asList(catIds));
         return R.ok();
     }
 
 }
+
+
+
+
+
+
+
+
+
+
+
